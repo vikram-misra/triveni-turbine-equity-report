@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triveni Turbine — Equity Command Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181d; --ink-2:#21242b; --ink-rule:rgba(244,240,232,.14);
+    --paper:#efebe2; --paper-2:#e6e1d5; --card:#f6f3ec;
+    --brass:#bf8a2c; --brass-deep:#8c5f19; --steel:#5c6b78;
+    --gain:#2f6e4f; --loss:#a8412f;
+    --rule:#cbc4b5; --txt:#1b1d22; --txt-soft:#54514a;
+    --disp:"Archivo",system-ui,sans-serif;
+    --body:"Newsreader",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--txt);font-family:var(--body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+  h1,h2,h3,.disp{font-family:var(--disp);margin:0}
+  .mono{font-family:var(--mono)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass-deep)}
+  a{color:inherit}
+
+  /* MASTHEAD */
+  .mast{background:var(--ink);color:var(--paper);padding:34px 0 30px;border-bottom:3px solid var(--brass)}
+  .mast .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-end}
+  .mast .eyebrow{color:var(--brass)}
+  .tick{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:#a9b0b8;line-height:1.7;word-break:break-word}
+  .mast h1{font-size:clamp(27px,6vw,52px);font-weight:800;letter-spacing:-.01em;line-height:.98;margin-top:10px}
+  .mast h1 span{color:var(--brass)}
+  .mast .sub{font-family:var(--mono);font-size:12.5px;color:#b9bec5;margin-top:14px;max-width:46ch;line-height:1.7}
+  .id{text-align:right;font-family:var(--mono);font-size:12px;color:#9aa1a9;line-height:1.9;min-width:170px}
+  .id b{color:var(--paper);font-weight:600}
+  .stance{margin-top:8px;display:inline-block;border:1px solid var(--ink-rule);padding:6px 11px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--brass)}
+
+  /* SECTION SCAFFOLD */
+  section{padding:52px 0;border-bottom:1px solid var(--rule)}
+  section:last-of-type{border-bottom:none}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:26px}
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--brass-deep);padding-top:3px}
+  .sec-head h2{font-size:clamp(20px,3vw,27px);font-weight:700;letter-spacing:-.01em}
+  .lead{font-size:19px;max-width:64ch;color:var(--txt)}
+  .lead.soft{color:var(--txt-soft)}
+
+  /* HERO PLOT */
+  .hero{background:var(--ink);color:var(--paper);border-bottom:1px solid var(--ink-rule);padding:44px 0 50px}
+  .hero .eyebrow{color:var(--brass)}
+  .hero h2{color:var(--paper);font-family:var(--disp);font-size:clamp(20px,3vw,26px);font-weight:700;margin:6px 0 4px}
+  .hero p.note{font-family:var(--mono);font-size:12.5px;color:#aab0b8;max-width:70ch;line-height:1.7}
+  .plot-card{margin-top:22px;background:#1b1e25;border:1px solid var(--ink-rule);padding:18px 16px 16px}
+  .plot-fig{margin:0}
+  .plot-box{width:100%;outline-offset:4px}
+  svg.plot{display:block;width:100%;height:auto}
+  svg.plot .grid line{stroke:rgba(244,240,232,.07);stroke-width:1}
+  svg.plot .axis{stroke:rgba(244,240,232,.20);stroke-width:1}
+  svg.plot .ylab text,svg.plot .xlab text{fill:#7d848c;font-family:var(--mono);font-size:11px}
+  svg.plot .ylab .low{fill:#a8896a}
+  svg.plot .cost{stroke:var(--brass);stroke-width:1;stroke-dasharray:3 5;opacity:.75}
+  svg.plot .costlab{fill:var(--brass);font-family:var(--mono);font-size:10.5px}
+  svg.plot .seg-pre{fill:none;stroke:#5c6b78;stroke-width:1.6;opacity:.55;stroke-linejoin:round;stroke-linecap:round}
+  svg.plot .seg-held{fill:none;stroke:#e6e1d5;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+  svg.plot .seg-post{fill:none;stroke:#9aa1a9;stroke-width:1.8;stroke-dasharray:4 4;opacity:.7;stroke-linejoin:round;stroke-linecap:round}
+  svg.plot .mknum{font-family:var(--mono);font-size:12px;font-weight:600}
+  svg.plot .mk-spike{opacity:.9}
+
+  .plot-note{font-family:var(--mono);font-size:11px;color:#9aa1a9;line-height:1.7;margin:14px 2px 0}
+  .plot-note b{color:#d8d3c8;font-weight:500}
+
+  /* PLOT KEY (numbered callouts) */
+  .plot-key{list-style:none;margin:16px 0 2px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:11px 26px;counter-reset:none}
+  .plot-key li{display:flex;gap:12px;align-items:flex-start}
+  .plot-key .kn{flex:none;width:22px;height:22px;border-radius:50%;font-family:var(--mono);font-size:11.5px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .kn-range{background:var(--steel);color:#f4f0e8}
+  .kn-entry,.kn-add{background:var(--brass);color:#16181d}
+  .kn-exit{background:var(--gain);color:#eafff4}
+  .kn-spike{background:transparent;border:2px solid var(--loss);color:#d99182}
+  .kn-now{background:var(--loss);color:#f4f0e8}
+  .plot-key b{font-family:var(--mono);font-weight:600;font-size:12.5px;color:#e8e3d8;display:block}
+  .plot-key time{font-family:var(--mono);font-size:10.5px;color:#878d95;display:block;margin:2px 0 3px}
+  .plot-key p{margin:0;font-family:var(--body);font-size:13.5px;line-height:1.45;color:#b3b8bf}
+
+  .plot-cap{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:#7d848c;margin-top:14px}
+
+  /* STAT STRIP */
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:8px}
+  .strip .cell{background:var(--card);padding:18px 16px}
+  .strip .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-soft)}
+  .strip .v{font-family:var(--mono);font-size:23px;font-weight:600;margin-top:7px;letter-spacing:-.01em}
+  .strip .v small{font-size:13px;color:var(--txt-soft);font-weight:400}
+  .pos{color:var(--gain)} .neg{color:var(--loss)}
+
+  /* TRADE LEDGER */
+  .ledger{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13.5px;margin-top:4px}
+  .ledger th{text-align:left;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-soft);font-weight:500;border-bottom:1.5px solid var(--ink);padding:0 12px 9px}
+  .ledger td{padding:13px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  .ledger td.r,.ledger th.r{text-align:right}
+  .ledger .act{color:var(--brass-deep);font-weight:600}
+  .ledger .gloss{font-family:var(--body);font-size:14.5px;color:var(--txt-soft);line-height:1.4}
+
+  /* LENS GRID */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .lens{background:var(--card);padding:24px 22px}
+  .lens .eyebrow{display:block;margin-bottom:10px}
+  .lens h3{font-size:18px;font-weight:700;margin-bottom:9px;letter-spacing:-.01em}
+  .lens p{font-size:15.5px;margin:0 0 10px;color:var(--txt)}
+  .lens ul{margin:0;padding-left:18px} .lens li{font-size:15px;margin-bottom:6px}
+  .flag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:10px}
+  .flag.rich{background:#f3e2c4;color:var(--brass-deep)}
+  .flag.watch{background:#f0d9d2;color:var(--loss)}
+  .data-row{font-family:var(--mono);font-size:12.5px;color:var(--txt-soft);border-top:1px dashed var(--rule);padding-top:10px;margin-top:14px}
+
+  /* CROSS-EXAM */
+  .qa{border-left:3px solid var(--brass);padding:4px 0 4px 22px;margin-bottom:26px}
+  .qa .q{font-family:var(--disp);font-weight:600;font-size:16.5px;margin-bottom:7px}
+  .qa .q::before{content:"Q  ";font-family:var(--mono);color:var(--brass-deep);font-size:13px}
+  .qa .a{font-size:16px;color:var(--txt)}
+  .qa .a::before{content:"A  ";font-family:var(--mono);color:var(--txt-soft);font-size:13px}
+
+  /* EDITABLE NOTE */
+  .yours{background:#1b1e25;color:var(--paper);padding:26px 24px;margin-top:8px;border:1px solid var(--ink-rule)}
+  .yours .eyebrow{color:var(--brass)}
+  .yours h3{font-family:var(--disp);color:var(--paper);font-size:18px;margin:8px 0 6px}
+  .yours p{font-family:var(--mono);font-size:12.5px;color:#aab0b8;line-height:1.7}
+  .yours ul{font-family:var(--body);color:#dcd8cf;margin:12px 0 0;padding-left:18px}
+  .yours li{margin-bottom:7px}
+  .ph{color:var(--brass);font-style:italic}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#9aa1a9;font-family:var(--mono);font-size:11.5px;line-height:1.8;padding:30px 0}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px}
+  footer b{color:var(--paper);font-weight:600}
+
+  /* ---- RESPONSIVE ---- */
+  @media(max-width:720px){
+    body{font-size:16px}
+    .strip{grid-template-columns:1fr 1fr}
+    .grid{grid-template-columns:1fr}
+    .mast .wrap{align-items:flex-start} .id{text-align:left}
+    .ledger{font-size:12px} .ledger td,.ledger th{padding-left:7px;padding-right:7px}
+  }
+  @media(max-width:560px){
+    .wrap{padding:0 16px}
+    section{padding:40px 0}
+    .sec-head{gap:12px;margin-bottom:20px}
+    .mast{padding:26px 0 24px}
+    .tick{font-size:11px}
+    .hero{padding:34px 0 38px}
+    .plot-card{padding:14px 11px 14px}
+    .plot-key{grid-template-columns:1fr;gap:13px}
+    .lead{font-size:17px}
+    .lens{padding:20px 17px}
+
+    /* trade ledger -> stacked cards */
+    .ledger thead{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+    .ledger,.ledger tbody,.ledger tr,.ledger td{display:block;width:100%}
+    .ledger tr{border:1px solid var(--rule);background:var(--card);margin-bottom:12px;padding:4px 14px}
+    .ledger td{border:none;border-bottom:1px dashed var(--rule);padding:10px 0;text-align:left}
+    .ledger td.r{text-align:left}
+    .ledger tr td:last-child{border-bottom:none}
+    .ledger td[data-label]::before{content:attr(data-label) "  ";font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt-soft);display:inline-block;min-width:52px}
+    .ledger td.gloss-cell{padding-top:8px}
+    .ledger td.gloss-cell::before{display:block;margin-bottom:5px}
+    .ledger .gloss{display:block}
+  }
+  @media(max-width:380px){
+    .strip{grid-template-columns:1fr}
+    .mast h1{font-size:25px}
+  }
+
+  /* motion + focus */
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.in{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+  /* ===== PROVENANCE & VERIFICATION ===== */
+  .prov-meta{margin:20px 0 8px;border-top:1px solid var(--rule)}
+  .prov-meta > div{display:flex;gap:16px;padding:11px 0;border-bottom:1px dashed var(--rule)}
+  .prov-meta dt{flex:0 0 122px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass-deep);padding-top:3px}
+  .prov-meta dd{margin:0;font-family:var(--mono);font-size:12.5px;color:var(--txt-soft);line-height:1.55;word-break:break-word}
+  .prov-meta dd .hi{color:var(--txt);font-weight:600}
+  .prov-h3{font-family:var(--disp);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:32px 0 4px}
+  .prov-sub{font-size:15px;color:var(--txt-soft);max-width:72ch;margin:0 0 14px}
+  .prov .ph{font-style:normal;color:var(--brass-deep)}
+  .prov-note{font-family:var(--mono);font-size:11px;color:var(--txt-soft);line-height:1.7;margin:12px 2px 0;padding-top:11px;border-top:1px dashed var(--rule)}
+  .prov-note b{color:var(--txt);font-weight:600}
+  .prov-invite{margin-top:26px;border-left:3px solid var(--brass);padding:8px 0 8px 18px;font-size:17px;color:var(--txt);max-width:66ch}
+  @media(max-width:560px){
+    .prov-meta > div{flex-direction:column;gap:4px;padding:10px 0}
+    .prov-meta dt{flex:none}
+    .prov-h3{margin-top:26px}
+    .prov-invite{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Equity Command Dossier</div>
+      <div class="tick">NSE: TRITURBINE · BSE: 533655 · Engineering — Industrial Equipment</div>
+      <h1>Triveni&nbsp;Turbine <span>Ltd.</span></h1>
+      <div class="sub">A single-name underwriting record: the thesis, the cycle I held through, and the trade I actually placed — built from my own broker statement, not a backtest.</div>
+    </div>
+    <div class="id">
+      <div>Analyst&nbsp; <b>Vikram Misra</b></div>
+      <div>Coverage&nbsp; <b>Power &amp; Industrial Capex</b></div>
+      <div>Position&nbsp; <b>Closed</b></div>
+      <div class="stance">Exited at fair value · re-underwrite on pullback</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">The Movement</div>
+    <h2>One round trip through a sector derating</h2>
+    <p class="note">Entered near the prior high in Jan '25 — early, and I own that. Held the franchise through a ~46% derating while mid-caps capitulated. Modest add into weakness. Exited into the Q4FY26 results breakout as the stock printed a 52-week high; the ₹788 that followed was an intraday spike that round-tripped within weeks.</p>
+
+    <div class="plot-card">
+      <figure class="plot-fig" aria-labelledby="plot-cap">
+        <div id="plot" class="plot-box" role="img" tabindex="0"
+             aria-label="Price-journey plot of Triveni Turbine. From the all-time high of ₹885 in November 2024, the stock falls to my entry at ₹703.79 in January 2025, continues through ₹675 and my ₹539.45 add to a 52-week low of ₹428 in early 2026 — the roughly 46% drawdown I held through — then breaks out to my ₹709.90 exit on 21 May 2026, spikes intraday to ₹788, and reverts to trade below my exit. A dashed reference line marks my ₹698.20 blended cost.">
+        </div>
+        <p class="plot-note"><b>Bold</b> = the position I held, entry → exit, through the ₹428 low. &nbsp;<b>Dashed</b> = price action after I sold. &nbsp;<b>Dotted brass</b> = my ₹698.20 blended cost. Numbered markers map to the key below.</p>
+        <ol class="plot-key">
+          <li><span class="kn kn-range" aria-hidden="true">1</span><div><b>All-time high ₹885</b><time>Nov '24</time><p>The cycle peak — context for how early my entry was.</p></div></li>
+          <li><span class="kn kn-entry" aria-hidden="true">2</span><div><b>BUY 284 @ ₹703.79</b><time>16 Jan '25</time><p>Initiated on the franchise thesis, just below the prior 52-week high of ₹770. Early — the cycle hadn't turned.</p></div></li>
+          <li><span class="kn kn-range" aria-hidden="true">3</span><div><b>₹675</b><time>Jul '25</time><p>A step down on the way through the derating.</p></div></li>
+          <li><span class="kn kn-add" aria-hidden="true">4</span><div><b>ADD 10 @ ₹539.45</b><time>17 Nov '25</time><p>Small top-up into weakness — directionally right, too small to move the cost basis.</p></div></li>
+          <li><span class="kn kn-range" aria-hidden="true">5</span><div><b>52-week low ₹428</b><time>early '26</time><p>The trough I held through — about a 46% drawdown from my cost basis.</p></div></li>
+          <li><span class="kn kn-exit" aria-hidden="true">6</span><div><b>SELL 294 @ ₹709.90</b><time>21 May '26</time><p>Exited the full position into the Q4FY26 results breakout, at a 52-week high, near Street fair value.</p></div></li>
+          <li><span class="kn kn-spike" aria-hidden="true">7</span><div><b>₹788 intraday spike</b><time>late May '26</time><p>Blew off to ₹788 days later, then round-tripped within weeks. I did not chase it.</p></div></li>
+          <li><span class="kn kn-now" aria-hidden="true">8</span><div><b>Reverted — below exit</b><time>now</time><p>The spike gave it all back; the stock now trades below my ₹709.90 exit.</p></div></li>
+        </ol>
+        <figcaption id="plot-cap" class="plot-cap">Fig. 1 — One round trip through a sector derating. Sources: Groww realised-P&amp;L statement (trade prints); NSE range data.</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<!-- 01 THE TRADE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">01</div><h2>The trade, exactly as it happened</h2></div>
+    <p class="lead soft">Pulled verbatim from my Groww realised-P&amp;L statement. No rounding in my favour — the return is what it is, and the judgment is in how the position was run, not the rupees.</p>
+    <table class="ledger">
+      <thead><tr><th>Action</th><th class="r">Qty</th><th class="r">Price</th><th>Date</th><th>What I was doing</th></tr></thead>
+      <tbody>
+        <tr><td class="act" data-label="Action">BUY</td><td class="r" data-label="Qty">284</td><td class="r" data-label="Price">₹703.79</td><td data-label="Date">16 Jan 2025</td><td class="gloss gloss-cell" data-label="What I was doing">Initiated on the franchise thesis — but near the prior high. Early entry; the cycle hadn't turned.</td></tr>
+        <tr><td class="act" data-label="Action">ADD</td><td class="r" data-label="Qty">10</td><td class="r" data-label="Price">₹539.45</td><td data-label="Date">17 Nov 2025</td><td class="gloss gloss-cell" data-label="What I was doing">Topped up into the derating. Small — directionally right, not size that moved the cost basis.</td></tr>
+        <tr><td class="act" data-label="Action">SELL</td><td class="r" data-label="Qty">294</td><td class="r" data-label="Price">₹709.90</td><td data-label="Date">21 May 2026</td><td class="gloss gloss-cell" data-label="What I was doing">Exited the full position into the Q4FY26 results breakout, at a 52-week high, near Street fair value.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="strip" style="margin-top:26px">
+      <div class="cell"><div class="k">Realised P&amp;L</div><div class="v pos">+₹3,440<small> exact ₹3,439.74</small></div></div>
+      <div class="cell"><div class="k">Return on cost</div><div class="v pos">+1.68%<small> / ~16 mo</small></div></div>
+      <div class="cell"><div class="k">NIFTY, same window</div><div class="v">+2.1%</div></div>
+      <div class="cell"><div class="k">Max drawdown held</div><div class="v neg">−46%<small> to ₹428</small></div></div>
+    </div>
+    <p class="lead soft" style="margin-top:22px;font-size:16.5px">The honest read: <b style="color:var(--txt)">the thesis was right and the business re-rated — my return was capped by the entry, not the exit.</b> The skill on display is conviction to hold quality through a 46% drawdown and the discipline to sell the spike, not a P&amp;L I'd pretend is alpha.</p>
+  </div>
+</section>
+
+<!-- 02 SIX LENSES -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">02</div><h2>The name, across every lens I'd be asked about</h2></div>
+    <div class="grid">
+
+      <div class="lens">
+        <span class="eyebrow">Business &amp; Strategy</span>
+        <h3>A quality, asset-light franchise</h3>
+        <p>Domestic leader in sub-100&nbsp;MW industrial steam turbines, ~56% promoter-held. The moat is the installed base: an annuity-like aftermarket and refurbishment stream that compounds with every unit shipped.</p>
+        <ul>
+          <li>Enquiry pipeline reported roughly doubling YoY</li>
+          <li>Export push across Europe, US, SE Asia</li>
+          <li>Optionality: data-center power, SMRs, geothermal, CO₂-based turbines</li>
+        </ul>
+      </div>
+
+      <div class="lens">
+        <span class="eyebrow">Financials</span>
+        <h3>Compounding, with one thing to watch</h3>
+        <p>Record Q4FY26: revenue ~₹680&nbsp;Cr (+26% YoY), PAT ₹101.9&nbsp;Cr. FY26 ~₹2,180&nbsp;Cr revenue, ~₹349&nbsp;Cr profit. Low debt, and a consistent dividend of ₹2.25/share.</p>
+        <span class="flag watch">Watch</span>
+        <p style="margin:0">Debtor days have crept from ~71 to ~107 — worth a question to management on collections and order mix before getting comfortable.</p>
+      </div>
+
+      <div class="lens">
+        <span class="eyebrow">Valuation</span>
+        <h3>Priced for perfection</h3>
+        <span class="flag rich">Rich · my own winner</span>
+        <p>~64× earnings and ~15–16× book. This is not a cheap stock and I won't pretend otherwise. You are paying up for order-book visibility and flawless execution; the margin of safety is thin.</p>
+        <p style="margin:0">That is precisely why I sold into strength rather than chasing — the price had run ahead of the near-term fundamentals.</p>
+        <div class="data-row">Market cap ≈ ₹22,000&nbsp;Cr · ~64× earnings · ~15–16× book</div>
+      </div>
+
+      <div class="lens">
+        <span class="eyebrow">Technicals</span>
+        <h3>I traded the structure, not the noise</h3>
+        <p>₹885 ATH → ~46% derating to a ₹428 base → a clean results-driven breakout past the ₹675 prior high. I sold the breakout at ₹709.90.</p>
+        <p style="margin:0">The ₹788 print days later was an intraday blow-off that the stock immediately surrendered — it now sits below my exit. The exit was the structure paying off.</p>
+      </div>
+
+      <div class="lens">
+        <span class="eyebrow">Sector</span>
+        <h3>India's power-capex cycle</h3>
+        <p>A NIFTY Energy constituent levered to the multi-year capex theme — thermal restart, renewables build-out, and broad industrial capex — with a genuine export angle that de-risks the domestic cycle.</p>
+        <p style="margin:0">The same theme that crushed low-quality mid-caps rewarded the quality leader as earnings landed.</p>
+      </div>
+
+      <div class="lens">
+        <span class="eyebrow">Risk &amp; Behaviour</span>
+        <h3>Why this was conviction, not stubbornness</h3>
+        <p>My broker statement also shows losers I held too long. The distinction matters and I can defend it: Triveni had an improving, fundamentally-anchored thesis and a quality balance sheet — a deliberate hold.</p>
+        <p style="margin:0">A position with no durable thesis is not conviction; it's a behavioural mistake. Knowing which is which is the whole job.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 03 PROVENANCE & VERIFICATION -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-num">03</div><h2>Provenance &amp; verification</h2></div>
+    <p class="lead soft">All trade data is drawn directly from primary records — my Groww realised-P&amp;L statement and my CDSL Consolidated Account Statement (CAS). Each trade below is backed by an exchange-issued contract note, so every figure traces to an independent source rather than being taken on trust.</p>
+
+    <dl class="prov-meta">
+      <div><dt>Security</dt><dd>Triveni Turbine Ltd · ISIN <span class="hi">INE152M01016</span> · NSE TRITURBINE · BSE 533655</dd></div>
+      <div><dt>Source statement</dt><dd>Groww realised-P&amp;L · 01 Apr 2026 to 13 Jun 2026 · client code <span class="hi">····4109</span> <span style="color:var(--brass-deep)">(full ID redacted)</span></dd></div>
+      <div><dt>Reconciles to</dt><dd>Realised P&amp;L <span class="hi">₹3,439.74</span> (<span class="hi">+1.68%</span>) on 294 shares — the exact figures used throughout this dossier</dd></div>
+    </dl>
+
+    <h3 class="prov-h3">Trade fingerprints</h3>
+    <p class="prov-sub">The identifiers below print on each exchange contract note and can be cross-checked against the broker and depository records. Bracketed fields are placeholders for me to fill from the actual notes — nothing here is auto-generated.</p>
+    <table class="ledger prov">
+      <thead><tr><th>Trade</th><th>ISIN</th><th>Exch. order ID</th><th>Trade ID</th><th>Contract note (no. / date)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td data-label="Trade"><span class="act">BUY</span> 284 @ ₹703.79 · 16 Jan 2025</td>
+          <td data-label="ISIN">INE152M01016</td>
+          <td data-label="Order ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Trade ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Contract note"><span class="ph">[ ____ ] / [ dd-mmm-yy ]</span></td>
+        </tr>
+        <tr>
+          <td data-label="Trade"><span class="act">ADD</span> 10 @ ₹539.45 · 17 Nov 2025</td>
+          <td data-label="ISIN">INE152M01016</td>
+          <td data-label="Order ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Trade ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Contract note"><span class="ph">[ ____ ] / [ dd-mmm-yy ]</span></td>
+        </tr>
+        <tr>
+          <td data-label="Trade"><span class="act">SELL</span> 294 @ ₹709.90 · 21 May 2026</td>
+          <td data-label="ISIN">INE152M01016</td>
+          <td data-label="Order ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Trade ID"><span class="ph">[ ____ ]</span></td>
+          <td data-label="Contract note"><span class="ph">[ ____ ] / [ dd-mmm-yy ]</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="prov-note"><b>Shown freely</b> (these print on the contract notes): ISIN, trade dates, exchange order &amp; trade IDs, contract-note numbers. <b>Redacted in any shared originals:</b> PAN in full, demat / BO ID except last 4, and bank-account details.</p>
+
+    <p class="prov-invite">Originals, contract notes, and the depository statement are available on request — happy to walk through them live.</p>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <div><b>Triveni Turbine — Equity Command Dossier</b><br>Trade data: Groww realised-P&amp;L statement (verified). Market data: NSE/BSE, company filings, Q4FY26 results, broker notes.</div>
+    <div>Prepared by <b>Vikram Misra</b><br>Not investment advice · a record of personal analysis and a closed personal position.</div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   PRICE-JOURNEY PLOT  (data-driven, responsive, no dependency)
+   ------------------------------------------------------------
+   EDIT ONE LINE: set CURRENT to the exact current price (below
+   the ₹709.90 exit) when you have it. Leave as null to show the
+   marker as "below exit" with no number. If you set a number,
+   also update key item 8's text in the markup above.
+   ============================================================ */
+(function(){
+  var box = document.getElementById('plot');
+  if(!box) return;
+
+  var CURRENT = null;        // e.g. 672  — exact current price, below ₹709.90
+  var NOW_FALLBACK = 665;    // visual placement only, used when CURRENT === null
+
+  // price + type per marker (prose lives in the numbered key list)
+  var DATA = [
+    {n:1, p:885,    t:'range'},
+    {n:2, p:703.79, t:'entry'},
+    {n:3, p:675,    t:'range'},
+    {n:4, p:539.45, t:'add'},
+    {n:5, p:428,    t:'range'},
+    {n:6, p:709.90, t:'exit'},
+    {n:7, p:788,    t:'spike'},
+    {n:8, p:(CURRENT==null?NOW_FALLBACK:CURRENT), t:'now'}
+  ];
+  var COST = 698.20, PMIN = 415, PMAX = 905;
+  var COLOR = {range:'#5c6b78', entry:'#bf8a2c', add:'#bf8a2c', exit:'#2f6e4f', spike:'#a8412f', now:'#a8412f'};
+
+  var lastW = -1;
+
+  function render(){
+    var W = Math.max(258, Math.round(box.clientWidth || 320));
+    if(W === lastW) return;            // size unchanged -> skip
+    lastW = W;
+    var H = Math.round(Math.min(450, Math.max(360, W*0.60)));
+    var mL = (W<420?38:46), mR = (W<420?12:18), mT = 24, mB = 40;
+    var x0=mL, x1=W-mR, y0=mT, y1=H-mB, iw=x1-x0, ih=y1-y0;
+    var N = DATA.length;
+
+    function sx(i){ return x0 + (i/(N-1))*iw; }
+    function sy(p){ return y1 - (p-PMIN)/(PMAX-PMIN)*ih; }
+
+    var s = [];
+    s.push('<svg class="plot" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">');
+
+    // gridlines + y labels
+    var ticks=[500,600,700,800,900], gy, k;
+    s.push('<g class="grid">');
+    for(k=0;k<ticks.length;k++){ gy=sy(ticks[k]); s.push('<line x1="'+x0+'" y1="'+gy.toFixed(1)+'" x2="'+x1+'" y2="'+gy.toFixed(1)+'"/>'); }
+    s.push('</g><g class="ylab">');
+    for(k=0;k<ticks.length;k++){ gy=sy(ticks[k]); s.push('<text x="'+(x0-8)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end">'+ticks[k]+'</text>'); }
+    s.push('<text x="'+(x0-8)+'" y="'+(sy(428)+3.5).toFixed(1)+'" text-anchor="end" class="low">428</text>');
+    s.push('</g>');
+
+    // x baseline + sparse date anchors
+    s.push('<line class="axis" x1="'+x0+'" y1="'+y1+'" x2="'+x1+'" y2="'+y1+'"/>');
+    var dates = (W>=560)
+      ? [[0,"Nov '24","start"],[1,"Jan '25","middle"],[3,"Nov '25","middle"],[5,"May '26","middle"],[7,"now","end"]]
+      : [[0,"Nov '24","start"],[5,"May '26","middle"],[7,"now","end"]];
+    s.push('<g class="xlab">');
+    for(k=0;k<dates.length;k++){ s.push('<text x="'+sx(dates[k][0]).toFixed(1)+'" y="'+(y1+16)+'" text-anchor="'+dates[k][2]+'">'+dates[k][1]+'</text>'); }
+    s.push('</g>');
+
+    // blended-cost reference line
+    var cy=sy(COST);
+    s.push('<line class="cost" x1="'+x0+'" y1="'+cy.toFixed(1)+'" x2="'+x1+'" y2="'+cy.toFixed(1)+'"/>');
+    s.push('<text class="costlab" x="'+((x0+x1)/2).toFixed(1)+'" y="'+(cy-6).toFixed(1)+'" text-anchor="middle">'+(W<430?'cost ₹698.20':'blended cost ₹698.20')+'</text>');
+
+    // price path: pre-entry (faint) / held (bold) / post-exit (dashed)
+    function pts(a,b){ var o=[],i; for(i=a;i<=b;i++){ o.push(sx(i).toFixed(1)+','+sy(DATA[i].p).toFixed(1)); } return o.join(' '); }
+    s.push('<polyline class="seg-pre" points="'+pts(0,1)+'"/>');
+    s.push('<polyline class="seg-held" points="'+pts(1,5)+'"/>');
+    s.push('<polyline class="seg-post" points="'+pts(5,7)+'"/>');
+
+    // numbered markers
+    var R = (W<420?9.5:11), i, d, px, py, c, dark;
+    for(i=0;i<N;i++){
+      d=DATA[i]; px=sx(i); py=sy(d.p); c=COLOR[d.t];
+      if(d.t==='spike'){
+        s.push('<circle class="mk-spike" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+R+'" fill="#1b1e25" stroke="'+c+'" stroke-width="2.4"/>');
+        s.push('<text class="mknum" x="'+px.toFixed(1)+'" y="'+(py+R*0.36).toFixed(1)+'" text-anchor="middle" fill="'+c+'">'+d.n+'</text>');
+      } else {
+        dark = (d.t==='entry'||d.t==='add');
+        s.push('<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+R+'" fill="'+c+'"'+(d.t==='exit'?' stroke="#eafff4" stroke-width="1.4"':'')+'/>');
+        s.push('<text class="mknum" x="'+px.toFixed(1)+'" y="'+(py+R*0.36).toFixed(1)+'" text-anchor="middle" fill="'+(dark?'#16181d':'#f4f0e8')+'">'+d.n+'</text>');
+      }
+    }
+    s.push('</svg>');
+    box.innerHTML = s.join('');
+  }
+
+  render();
+  var t;
+  function onResize(){ clearTimeout(t); t=setTimeout(render,120); }
+  if('ResizeObserver' in window){ try{ new ResizeObserver(onResize).observe(box); }catch(e){ window.addEventListener('resize',onResize); } }
+  else { window.addEventListener('resize',onResize); }
+})();
+
+/* reveal-on-scroll (respects reduced-motion) */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: no-preference)').matches){
+    document.querySelectorAll('section .wrap > *, .plot-card').forEach(function(el){el.classList.add('reveal');});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  }
+})();
+</script>
+</body>
+</html>
